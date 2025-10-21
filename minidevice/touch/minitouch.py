@@ -209,6 +209,22 @@ class MiniTouch(Touch):
             _builder.up(point_id)
             _builder.publish(self)
 
+    def __touch_with_id(self, touch_id, point, operation, pressure=100):
+        point = self.__convert(point[0], point[1])
+        x, y = list(map(int, point))
+
+        _builder = CommandBuilder()
+        if operation == "down":
+            _builder.down(touch_id, x, y, pressure)
+        elif operation == "move":
+            _builder.move(touch_id, x, y, pressure)
+        elif operation == "up":
+            _builder.up(touch_id)
+        else:
+            raise ValueError("operation must be 'down', 'move' or 'up'")
+
+        _builder.publish(self)
+
     def __convert(self, x, y):
         if self.__orientation == 0:
             pass
@@ -225,6 +241,9 @@ class MiniTouch(Touch):
 
     def swipe(self, points: list, duration: int = 300):
         self.__swipe(points, duration=duration / (len(points) - 1))
+
+    def touch_with_id(self, touch_id: int, x: int, y: int, operation: str):
+        self.__touch_with_id(touch_id, (x, y), operation)
 
     def __del__(self):
         self.stop()
