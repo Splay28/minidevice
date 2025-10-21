@@ -82,3 +82,7 @@ class MiniDevice:
     def swipe(self, points: list, duration: int = 300):
         """滑动"""
         self._perform_touch_action('swipe', points, duration=duration)
+
+    def touch_with_id(self, touch_id: int, x: int, y: int, operation: str):
+        """指定id点触控"""
+        self._perform_touch_action('touch_with_id', touch_id, x, y, operation)
